@@ -4,9 +4,9 @@ require File.expand_path('../lib/middleware/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Mitchell Hashimoto"]
   gem.email         = ["mitchell.hashimoto@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{Generalized implementation of the middleware abstraction for Ruby.}
+  gem.summary       = %q{Generalized implementation of the middleware abstraction for Ruby.}
+  gem.homepage      = "https://github.com/mitchellh/middleware"
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "redcarpet", "~> 2.1.0"
