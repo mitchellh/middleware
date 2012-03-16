@@ -98,7 +98,7 @@ module Middleware
     end
 
     # Runs the builder stack with the given environment.
-    def call(env)
+    def call(env=nil)
       to_app.call(env)
     end
 

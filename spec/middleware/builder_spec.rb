@@ -51,6 +51,16 @@ describe Middleware::Builder do
       two.call(data)
       data[:one].should == true
     end
+
+    it "should default the env to `nil` if not given" do
+      result = false
+      proc = Proc.new { |env| result = env.nil? }
+
+      instance.use proc
+      instance.call
+
+      result.should be
+     end
   end
 
   context "inserting" do
