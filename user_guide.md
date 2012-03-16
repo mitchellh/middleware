@@ -9,7 +9,9 @@ large sequential chunks of logic into small pieces.
 
 Middleware is distributed as a RubyGem, so simply gem install:
 
-    gem install middleware
+```console
+$ gem install middleware
+```
 
 ## A Basic Example
 
@@ -83,24 +85,28 @@ problems.
 One method of creating middleware, and by far the most common, is to define
 a class that duck types to the following interface:
 
-    class MiddlewareExample
-      def initialize(app); end
-      def call(env); end
-    end
+```ruby
+class MiddlewareExample
+  def initialize(app); end
+  def call(env); end
+end
+```
 
 Therefore, a basic middleware example follows:
 
-    class Trace
-      def initialize(app)
-        @app = app
-      end
+```ruby
+class Trace
+  def initialize(app)
+    @app = app
+  end
 
-      def call(env)
-        puts "Trace up"
-        @app.call(env)
-        puts "Trace down"
-      end
-    end
+  def call(env)
+    puts "Trace up"
+    @app.call(env)
+    puts "Trace down"
+  end
+end
+```
 
 A basic description of the two methods that a middleware must implement:
 
@@ -118,7 +124,9 @@ A middleware can also be a simple lambda. The downside of using a lambda is that
 it only has access to the state on the initial call, there is no "post" step for
 lambdas. A basic example, in the context of a web request:
 
-    lambda { |env| puts "You requested: #{env["http.request_url"]}" }
+```ruby
+lambda { |env| puts "You requested: #{env["http.request_url"]}" }
+```
 
 ## Middleware Stacks
 
@@ -131,15 +139,19 @@ executed in the order given.
 The middleware library comes with a `Builder` class which provides a nice DSL
 for building a stack of middlewares:
 
-    stack = Middleware::Builder.new do
-      use Trace
-      use lambda { |env| puts "LAMBDA!" }
-    end
+```ruby
+stack = Middleware::Builder.new do
+  use Trace
+  use lambda { |env| puts "LAMBDA!" }
+end
+```
 
 This `stack` variable itself is now a valid middleware and has the same interface,
 so to execute the stack, just call `call` on it:
 
-    stack.call
+```ruby
+stack.call
+```
 
 The call method takes an optional parameter which is the state to pass into the
 initial middleware.
@@ -152,37 +164,43 @@ created. Given the `stack` variable created above, we can manipulate it as
 follows. Please imagine that each example runs with the original `stack` variable,
 so that the order of the examples doesn't actually matter:
 
-    # Insert a new item after the Trace middleware
-    stack.insert_after(Trace, SomeOtherMiddleware)
+```ruby
+# Insert a new item after the Trace middleware
+stack.insert_after(Trace, SomeOtherMiddleware)
 
-    # Replace the lambda
-    stack.replace(1, SomeOtherMiddleware)
+# Replace the lambda
+stack.replace(1, SomeOtherMiddleware)
 
-    # Delete the lambda
-    stack.delete(1)
+# Delete the lambda
+stack.delete(1)
+```
 
 ### Passing Additional Constructor Arguments
 
 When using middleware in a stack, you can also pass in additional constructor
 arguments. Given the following middleware:
 
-    class Echo
-      def initialize(app, message)
-        @app = app
-        @message = message
-      end
+```ruby
+class Echo
+  def initialize(app, message)
+    @app = app
+    @message = message
+  end
 
-      def call(env)
-        puts @message
-        @app.call(env)
-      end
-    end
+  def call(env)
+    puts @message
+    @app.call(env)
+  end
+end
+```
 
 We can initialize `Echo` with a proper message as follows:
 
-    Middleware::Builder.new do
-      use Echo, "Hello, World!"
-    end
+```ruby
+Middleware::Builder.new do
+  use Echo, "Hello, World!"
+end
+```
 
 Then when the stack is called, it will output "Hello, World!"
 
