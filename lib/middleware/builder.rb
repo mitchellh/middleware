@@ -53,11 +53,6 @@ module Middleware
     #
     # @param [Class] middleware The middleware class
     def use(middleware, *args, &block)
-      # Prepend with a environment setter if args are given
-      if !args.empty? && args.first.is_a?(Hash) && middleware != Env::Set
-        self.use(Env::Set, args.shift, &block)
-      end
-
       if middleware.kind_of?(Builder)
         # Merge in the other builder's stack into our own
         self.stack.concat(middleware.stack)
@@ -104,7 +99,7 @@ module Middleware
 
     # Runs the builder stack with the given environment.
     def call(env)
-      to_app(env).call(env)
+      to_app.call(env)
     end
 
     protected
@@ -131,12 +126,9 @@ module Middleware
 
     # Converts the builder stack to a runnable action sequence.
     #
-    # @param [Vagrant::Action::Environment] env The action environment
     # @return [Object] A callable object
-    def to_app(env)
-      # Wrap the middleware stack with the Warden to provide a consistent
-      # and predictable behavior upon exceptions.
-      @runner_class.new(stack.dup, env)
+    def to_app
+      @runner_class.new(stack.dup)
     end
   end
 end
