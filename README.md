@@ -13,6 +13,10 @@ This project is distributed as a RubyGem:
 
 ## Usage
 
+Once you create a basic middleware, you can use the builder to
+have a nice DSL to build middleware stacks. Calling the middleware
+is simple, as well.
+
 ```ruby
 # Basic middleware that just prints the inbound and
 # outbound steps.
