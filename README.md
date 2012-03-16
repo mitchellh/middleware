@@ -1,5 +1,7 @@
 # Middleware
 
+![Build Status](https://secure.travis-ci.org/mitchellh/middleware.png?branch=master)
+
 This is a generalized library for using middleware patterns within
 your Ruby projects.
 
