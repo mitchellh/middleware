@@ -11,6 +11,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec-core", "~> 2.8.0"
   gem.add_development_dependency "rspec-expectations", "~> 2.8.0"
+  gem.add_development_dependency "rspec-mocks", "~> 2.8.0"
+  gem.add_development_dependency "yard", "~> 0.7.5"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")

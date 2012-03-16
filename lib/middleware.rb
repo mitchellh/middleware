@@ -1,5 +1,3 @@
 require "middleware/version"
-
-module Middleware
-  # Your code goes here...
-end
+require "middleware/builder"
+require "middleware/runner"
