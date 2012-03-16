@@ -1,18 +1,11 @@
 # Middleware
 
-TODO: Write a gem description
+This is a generalized library for using middleware patterns within
+your Ruby projects.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'middleware'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+This project is distributed as a RubyGem:
 
     $ gem install middleware
 
