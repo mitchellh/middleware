@@ -9,6 +9,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = ""
 
   gem.add_development_dependency "rake"
+  gem.add_development_dependency "redcarpet", "~> 2.1.0"
   gem.add_development_dependency "rspec-core", "~> 2.8.0"
   gem.add_development_dependency "rspec-expectations", "~> 2.8.0"
   gem.add_development_dependency "rspec-mocks", "~> 2.8.0"
