@@ -11,7 +11,9 @@ To get started, the best place to look is [the user guide](https://github.com/mi
 
 This project is distributed as a RubyGem:
 
-    $ gem install middleware
+```console
+$ gem install middleware
+```
 
 ## Usage
 
