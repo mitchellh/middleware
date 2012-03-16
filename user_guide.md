@@ -5,6 +5,59 @@ of the middleware pattern for Ruby. The middleware pattern is a useful
 abstraction tool in various cases, but is specifically useful for splitting
 large sequential chunks of logic into small pieces.
 
+## Installing
+
+Middleware is distributed as a RubyGem, so simply gem install:
+
+    gem install middleware
+
+## A Basic Example
+
+Below is a basic example of the library in use. If you don't understand
+what middleware is, please read below. This example is simply meant to give
+you a quick idea of what the library looks like.
+
+```ruby
+# Basic middleware that just prints the inbound and
+# outbound steps.
+class Trace
+  def initialize(app, value)
+    @app   = app
+    @value = value
+  end
+
+  def call(env)
+    puts "--> #{@value}"
+    @app.call(env)
+    puts "<-- #{@value}"
+  end
+end
+
+# Build the actual middleware stack which runs a sequence
+# of slightly different versions of our middleware.
+stack = Middleware::Builder.new do
+  use Trace, "A"
+  use Trace, "B"
+  use Trace, "C"
+end
+
+# Run it!
+stack.call(nil)
+```
+
+And the output:
+
+```
+--> A
+--> B
+--> C
+<-- C
+<-- B
+<-- A
+```
+
+
+
 ## Middleware
 
 ### What is it?

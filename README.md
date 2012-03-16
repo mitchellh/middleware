@@ -5,6 +5,8 @@
 This is a generalized library for using middleware patterns within
 your Ruby projects.
 
+To get started, the best place to look is [the user guide](https://github.com/mitchellh/middleware/blob/master/user_guide.md).
+
 ## Installation
 
 This project is distributed as a RubyGem:
