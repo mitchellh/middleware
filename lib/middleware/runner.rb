@@ -4,7 +4,7 @@ module Middleware
   # in order, then reversing the order.
   class Runner
     # A middleware which does nothing
-    EMPTY_MIDDLEWARE = lambda { |env| }
+    EMPTY_MIDDLEWARE = lambda { |env| env }
 
     # Build a new middleware runner with the given middleware
     # stack.
