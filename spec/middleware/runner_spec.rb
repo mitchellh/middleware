@@ -92,6 +92,26 @@ describe Middleware::Runner do
       raise_error
   end
 
+  it "should not call middlewares which aren't called" do
+    # A does not call B, so B should never execute
+    data = []
+    a = Class.new do
+      def initialize(app); @app = app; end
+
+      define_method :call do |env|
+        data << "a"
+      end
+    end
+
+    b = lambda { |env| data << "b" }
+
+    env = {}
+    instance = described_class.new([a, b])
+    instance.call(env)
+
+    data.should == ["a"]
+  end
+
   describe "exceptions" do
     it "should propagate the exception up the middleware chain" do
       # This tests a few important properties:
@@ -135,6 +155,9 @@ describe Middleware::Runner do
     end
 
     it "should stop propagation if rescued" do
+      # This test mainly tests that if there is a sequence A, B, C, and
+      # an exception is raised in C, that if B rescues this, then the chain
+      # continues fine backwards.
       data = []
       a = Class.new do
         def initialize(app); @app = app; end
