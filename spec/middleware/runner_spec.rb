@@ -91,4 +91,81 @@ describe Middleware::Runner do
     expect { described_class.new([27]) }.to
       raise_error
   end
+
+  describe "exceptions" do
+    it "should propagate the exception up the middleware chain" do
+      # This tests a few important properties:
+      # * Exceptions propagate multiple middlewares
+      #   - C raises an exception, which raises through B to A.
+      # * Rescuing exceptions works
+      data = []
+      a = Class.new do
+        def initialize(app)
+          @app = app
+        end
+
+        define_method :call do |env|
+          data << "a"
+          begin
+            @app.call(env)
+            data << "never"
+          rescue Exception => e
+            data << "e"
+            raise
+          end
+        end
+      end
+
+      b = Class.new do
+        def initialize(app); @app = app; end
+
+        define_method :call do |env|
+          data << "b"
+          @app.call(env)
+        end
+      end
+
+      c = lambda { |env| raise "ERROR" }
+
+      env = {}
+      instance = described_class.new([a, b, c])
+      expect { instance.call(env) }.to raise_error
+
+      data.should == ["a", "b", "e"]
+    end
+
+    it "should stop propagation if rescued" do
+      data = []
+      a = Class.new do
+        def initialize(app); @app = app; end
+
+        define_method :call do |env|
+          data << "in_a"
+          @app.call(env)
+          data << "out_a"
+        end
+      end
+
+      b = Class.new do
+        def initialize(app); @app = app; end
+
+        define_method :call do |env|
+          data << "in_b"
+          @app.call(env) rescue nil
+          data << "out_b"
+        end
+      end
+
+      c = lambda do |env|
+        data << "in_c"
+        raise "BAD"
+      end
+
+      env = {}
+      instance = described_class.new([a, b, c])
+      instance.call(env)
+
+      data.should == ["in_a", "in_b", "in_c", "out_b", "out_a"]
+    end
+  end
 end
