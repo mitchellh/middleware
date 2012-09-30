@@ -90,6 +90,11 @@ describe Middleware::Builder do
       data[:data].should == [2, 1]
     end
 
+    it "raises an exception if attempting to insert before an invalid object" do
+      expect { instance.insert "object", appender_proc(1) }.
+        to raise_error(RuntimeError)
+    end
+
     it "can insert after" do
       instance.use appender_proc(1)
       instance.use appender_proc(3)
@@ -99,7 +104,7 @@ describe Middleware::Builder do
       data[:data].should == [1, 2, 3]
     end
 
-    it "raises an exception if an invalid object given" do
+    it "raises an exception if attempting to insert after an invalid object" do
       expect { instance.insert_after "object", appender_proc(1) }.
         to raise_error(RuntimeError)
     end
