@@ -111,6 +111,18 @@ describe Middleware::Runner do
     data.should == ["a"]
   end
 
+  it "should return env from call" do
+    env = {}
+
+    a = lambda { |env| env[:a_called] = true }
+    b = lambda { |env| env[:b_called] = true }
+
+    instance = described_class.new([a, b])
+    ret = instance.call(env)
+
+    ret.should == env
+  end
+
   describe "exceptions" do
     it "should propagate the exception up the middleware chain" do
       # This tests a few important properties:
