@@ -61,7 +61,7 @@ module Middleware
             next_middleware.call(env)
           end
         else
-          raise "Invalid middleware, doesn't respond to `call`: #{action.inspect}"
+          raise "Invalid middleware, doesn't respond to `call`: #{klass.inspect}"
         end
       end
     end
