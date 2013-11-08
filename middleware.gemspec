@@ -7,6 +7,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Generalized implementation of the middleware abstraction for Ruby.}
   gem.summary       = %q{Generalized implementation of the middleware abstraction for Ruby.}
   gem.homepage      = "https://github.com/mitchellh/middleware"
+  gem.license       = "MIT"
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "redcarpet", "~> 2.1.0"
