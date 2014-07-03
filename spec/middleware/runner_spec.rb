@@ -88,7 +88,7 @@ describe Middleware::Runner do
   end
 
   it "should raise an error if an invalid middleware is given" do
-    expect { described_class.new([27]) }.to raise_error
+    expect { described_class.new([27]) }.to raise_error(/Invalid middleware/)
   end
 
   it "should not call middlewares which aren't called" do
