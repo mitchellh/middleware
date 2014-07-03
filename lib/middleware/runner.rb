@@ -29,6 +29,10 @@ module Middleware
       # for properly calling the next middleware, and so on and so
       # forth.
       @kickoff.call(env)
+
+      # return env so the caller can make use of it after
+      # the middleware chain has finished
+      env
     end
 
     protected
