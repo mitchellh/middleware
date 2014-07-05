@@ -8,9 +8,9 @@ module Middleware
   #
   # Building a middleware stack is very easy:
   #
-  #     app = Middleware::Builder.new do
-  #       use A
-  #       use B
+  #     app = Middleware::Builder.new do |b|
+  #       b.use A
+  #       b.use B
   #     end
   #
   #     # Call the middleware
@@ -18,9 +18,14 @@ module Middleware
   #
   class Builder
     # Initializes the builder. An optional block can be passed which
-    # will be evaluated in the context of the instance.
+    # will either yield the builder or be evaluated in the context of the instance.
     #
     # Example:
+    #
+    #     Builder.new do |b|
+    #       b.use A
+    #       b.use B
+    #     end
     #
     #     Builder.new do
     #       use A
@@ -35,7 +40,14 @@ module Middleware
     def initialize(opts=nil, &block)
       opts ||= {}
       @runner_class = opts[:runner_class] || Runner
-      instance_eval(&block) if block_given?
+
+      if block_given?
+        if block.arity == 1
+          yield self
+        else
+          instance_eval(&block)
+        end
+      end
     end
 
     # Returns a mergeable version of the builder. If `use` is called with

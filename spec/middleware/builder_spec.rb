@@ -11,6 +11,38 @@ describe Middleware::Builder do
     Proc.new { |env| env[:data] << data }
   end
 
+  context "initialized with a block" do
+    context "without explicit receiver" do
+      it "instance evals the block" do
+        data = {}
+        proc = Proc.new { |env| env[:data] = true }
+
+        app = described_class.new do
+          use proc
+        end
+
+        app.call(data)
+
+        data[:data].should == true
+      end
+    end
+
+    context "with explicit receiver" do
+      it "yields self to the block" do
+        data = {}
+        proc = Proc.new { |env| env[:data] = true }
+
+        app = described_class.new do |b|
+          b.use proc
+        end
+
+        app.call(data)
+
+        data[:data].should == true
+      end
+    end
+  end
+
   context "basic `use`" do
     it "should add items to the stack and make them callable" do
       data = {}
