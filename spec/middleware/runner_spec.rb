@@ -148,7 +148,7 @@ describe Middleware::Runner do
 
       env = {}
       instance = described_class.new([a, b, c])
-      expect { instance.call(env) }.to raise_error
+      expect { instance.call(env) }.to raise_error(RuntimeError)
 
       data.should == ["a", "b", "e"]
     end
