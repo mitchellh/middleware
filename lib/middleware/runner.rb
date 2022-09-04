@@ -42,7 +42,7 @@ module Middleware
       # is always the empty middleware, which does nothing but return.
       stack.reverse.inject(EMPTY_MIDDLEWARE) do |next_middleware, current_middleware|
         # Unpack the actual item
-        klass, args, block = current_middleware
+        klass, args, kwargs, block = current_middleware
 
         # Default the arguments to an empty array. Otherwise in Ruby 1.8
         # a `nil` args will actually pass `nil` into the class. Not what
@@ -52,7 +52,7 @@ module Middleware
         if klass.is_a?(Class)
           # If the klass actually is a class, then instantiate it with
           # the app and any other arguments given.
-          klass.new(next_middleware, *args, &block)
+          klass.new(next_middleware, *args, **kwargs, &block)
         elsif klass.respond_to?(:call)
           # Make it a lambda which calls the item then forwards up
           # the chain.
